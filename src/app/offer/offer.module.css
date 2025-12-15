@@ -1,0 +1,335 @@
+.container {
+    min-height: 100vh;
+    background: #ffffff;
+    color: #0f172a;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+.hero {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    position: relative;
+}
+
+.heroBadge {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    border: 1px solid #fecaca;
+    margin-bottom: 2rem;
+    animation: slideDown 0.5s ease-out;
+    font-weight: 600;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+    max-width: 900px;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: #64748b;
+    max-width: 600px;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+}
+
+.timerContainer {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 1rem 2rem;
+    border-radius: 16px;
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    /* Removed centering transforms since we are positioning explicitly */
+    z-index: 100;
+    animation: slideDown 0.5s ease-out;
+}
+
+/* Reusing slideDown animation defined below or redefining if needed contextually */
+
+.timerBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timerValue {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #dc2626;
+    /* Consistent Red */
+    font-variant-numeric: tabular-nums;
+}
+
+.timerLabel {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.advantagesSection {
+    padding: 6rem 2rem;
+    background: #f8fafc;
+}
+
+.sectionTitle {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 4rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 2rem;
+    border-radius: 16px;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.iconWrapper {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #334155;
+}
+
+.cardText {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.testimonialsSection {
+    padding: 6rem 2rem;
+    background: #ffffff;
+}
+
+.testimonialCard {
+    background: #f8fafc;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.userAvatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    object-fit: cover;
+}
+
+.userName {
+    font-weight: 600;
+    display: block;
+    color: #334155;
+}
+
+.userRole {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.quote {
+    font-style: italic;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.pricingSection {
+    padding: 6rem 2rem;
+    background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+.pricingCard {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 2.5rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.popularCard {
+    background: #ffffff;
+    border: 2px solid #dc2626;
+    transform: scale(1.05);
+    box-shadow: 0 20px 25px -5px rgba(220, 38, 38, 0.1);
+    z-index: 10;
+}
+
+.popularBadge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #dc2626;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.planName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #334155;
+}
+
+.price {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    color: #1e293b;
+}
+
+.currency {
+    font-size: 1.5rem;
+    color: #94a3b8;
+}
+
+.featuresList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2.5rem 0;
+    flex-grow: 1;
+}
+
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: #64748b;
+}
+
+.ctaButton {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    background: #f1f5f9;
+    color: #475569;
+    transition: all 0.3s ease;
+}
+
+.ctaButton:hover {
+    background: #fecaca;
+    /* Light red hover */
+    color: #dc2626;
+}
+
+.primaryButton {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: white;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+}
+
+.primaryButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(220, 38, 38, 0.4);
+    color: white;
+    background: linear-gradient(135deg, #b91c1c, #991b1b);
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .popularCard {
+        transform: scale(1);
+    }
+
+    .timerContainer {
+        padding: 1rem 1.5rem;
+    }
+
+    .timerValue {
+        font-size: 2rem;
+    }
+}

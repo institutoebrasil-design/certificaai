@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:C:/Users/rmelov/Downloads/certificaai/dev.db"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  image         String?
+  role          String    @default("STUDENT") // STUDENT, ADMIN, AFFILIATE
+  credits       Int       @default(1)         // 1=Basic, 3=Pro, 5=Premium
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  certificates  Certificate[]
+  examAttempts  ExamAttempt[]
+  purchases     Purchase[]
+  
+  // Affiliate
+  affiliateCode String?   @unique
+  referredBy    String?   // ID of the affiliate who referred this user
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Decimal
+  duration    Int      // in hours
+  imageUrl    String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  exam        Exam?
+  certificates Certificate[]
+  purchases    Purchase[]
+  modules      Module[]
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  title       String
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  content     String?  // Text content or video URL
+  moduleId    String
+  module      Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+}
+
+model Exam {
+  id          String   @id @default(cuid())
+  courseId    String   @unique
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  questions   Question[]
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  examId      String
+  exam        Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  text        String
+  type        String   // MULTIPLE_CHOICE, DISSERTATION, CASE_STUDY
+  options     String?  // Array of options for multiple choice (JSON)
+  correctAnswer String? // For auto-correction
+}
+
+model ExamAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examId      String
+  score       Float
+  passed      Boolean
+  completedAt DateTime @default(now())
+}
+
+model Certificate {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  code        String   @unique // Unique validation code
+  issuedAt    DateTime @default(now())
+}
+
+model Purchase {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId    String   @unique // Assuming one purchase per course for now
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  amount      Decimal
+  status      String   // PENDING, COMPLETED, FAILED
+  createdAt   DateTime @default(now())
+}

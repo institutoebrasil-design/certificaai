@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light Theme Color Palette */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+
+  /* Red Professional Theme Palette */
+  --primary: #dc2626;
+  /* Red-600 */
+  --primary-foreground: #ffffff;
+
+  --secondary: #e2e8f0;
+  /* Slate-200 */
+  --secondary-foreground: #1e293b;
+
+  --muted: #fee2e2;
+  /* Red-100 */
+  --muted-foreground: #991b1b;
+  /* Red-800 */
+
+  --accent: #ef4444;
+  /* Red-500 */
+  --accent-foreground: #ffffff;
+
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+
+  --border: #fecaca;
+  /* Red-200 */
+  --input: #e2e8f0;
+  --ring: #dc2626;
+
+  --radius: 0.75rem;
+}
+
+/* Dark mode fallback or user preference override if needed later, 
+   but enforcing Light as requested by switching primary styles */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Keeping light theme as default per request, 
+       but overriding dark mode system preference for now */
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    /* ... same as root ... */
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Utilities for glassmorphism in light mode */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
