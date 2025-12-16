@@ -58,6 +58,57 @@ export default function Quiz() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // New loading state to prevent flash
+
+  useEffect(() => {
+    async function checkAuth() {
+      // 1. Check for active Supabase session
+      const { supabase } = await import('@/lib/supabase');
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session) {
+        router.replace('/dashboard');
+        return;
+      }
+
+      // 2. Check for "known user" cookie (set in register/login)
+      // We need to parse cookies manually or assume browser handles it if using a library.
+      // Simple document.cookie check
+      const hasAuthCookie = document.cookie.split(';').some((item) => item.trim().startsWith('auth_email='));
+
+      if (hasAuthCookie) {
+        router.replace('/login');
+        return;
+      }
+
+      setIsLoading(false);
+    }
+
+    checkAuth();
+  }, [router]);
+
+  if (isLoading || isAnalyzing) {
+    return (
+      <main className={styles.container}>
+        <div className={styles.quizCard}>
+          <div className={styles.loadingState}>
+            <div className={styles.spinner}></div>
+            {isAnalyzing && (
+              <>
+                <h2 className={styles.title}>Analisando seu Perfil...</h2>
+                <div className={styles.analyzingText}>
+                  <p>Verificando compatibilidade...</p>
+                  <p>Selecionando melhores trilhas...</p>
+                  <p>Gerando plano personalizado...</p>
+                </div>
+              </>
+            )}
+            {!isAnalyzing && <p style={{ marginTop: '1rem' }}>Carregando...</p>}
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   const handleOptionClick = async () => {
     if (currentStep < questions.length - 1) {
