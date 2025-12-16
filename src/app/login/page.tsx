@@ -19,20 +19,25 @@ export default function LoginPage() {
         e.preventDefault();
         setLoading(true);
         setError('');
+        console.log("Submit started");
 
         try {
-            // Create a timeout promise
             const timeoutPromise = new Promise<{ success: boolean; error: string }>((_, reject) =>
-                setTimeout(() => reject(new Error('Timeout')), 15000)
+                setTimeout(() => reject(new Error('Timeout')), 8000) // Reduced to 8s
             );
 
-            // Race between server action and timeout
+            console.log("Calling loginUser...");
             const result = await Promise.race([
                 loginUser(email, password),
                 timeoutPromise
             ]) as { success: boolean; error?: string };
+            console.log("Result:", result);
 
             if (result.success) {
+                // Visual feedback
+                const btn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+                if (btn) btn.innerText = "Sucesso! Redirecionando...";
+
                 document.cookie = `auth_email=${email}; path=/; max-age=86400`;
                 router.push('/dashboard');
                 router.refresh();
@@ -41,11 +46,11 @@ export default function LoginPage() {
                 setLoading(false);
             }
         } catch (err: any) {
-            console.error("Login call failed:", err);
+            console.error("Login call failed/timeout:", err);
             if (err.message === 'Timeout') {
-                setError("O servidor demorou muito para responder. Verifique sua conexão ou tente novamente.");
+                setError("O servidor demorou muito (Timeout 8s). Tente novamente.");
             } else {
-                setError("Erro de conexão. Tente novamente.");
+                setError("Erro de conexão ou sistema.");
             }
             setLoading(false);
         }
