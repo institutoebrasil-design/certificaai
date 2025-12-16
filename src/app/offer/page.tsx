@@ -158,7 +158,7 @@ export default function OfferPage() {
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Acesso à Plataforma</li>
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Suporte por Email</li>
                         </ul>
-                        <Link href="/checkout-simulation?plan=basic" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Começar Agora</Link>
+                        <Link href="#" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none', background: '#ccc', cursor: 'not-allowed' }}>Em Breve</Link>
                     </div>
 
                     {/* Professional */}
@@ -174,7 +174,7 @@ export default function OfferPage() {
                             <li className={styles.featureItem}><Star size={20} color="#fbbf24" /> Pack Prompts ChatGPT</li>
                             <li className={styles.featureItem}><Star size={20} color="#fbbf24" /> Guia LinkedIn IA</li>
                         </ul>
-                        <Link href="/checkout-simulation?plan=pro" className={`${styles.ctaButton} ${styles.primaryButton}`} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Garantir Vaga</Link>
+                        <Link href="#" className={`${styles.ctaButton} ${styles.primaryButton}`} style={{ display: 'block', textAlign: 'center', textDecoration: 'none', background: '#ccc', cursor: 'not-allowed' }}>Em Breve</Link>
                     </div>
 
                     {/* Premium */}
@@ -190,7 +190,7 @@ export default function OfferPage() {
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Todos os Bônus</li>
                             <li className={styles.featureItem}><Unlock size={20} color="#a855f7" /> Acesso Antecipado</li>
                         </ul>
-                        <Link href="/checkout-simulation?plan=premium" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Quero Tudo</Link>
+                        <Link href="#" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none', background: '#ccc', cursor: 'not-allowed' }}>Em Breve</Link>
                     </div>
                 </div>
             </section>
