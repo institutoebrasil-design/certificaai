@@ -16,6 +16,8 @@ function RegisterContent() {
     const initialEmail = searchParams.get('email') || '';
     const plan = searchParams.get('plan') || 'basic';
 
+    const [name, setName] = useState(initialName);
+    const [email, setEmail] = useState(initialEmail);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [cpf, setCpf] = useState('');
@@ -42,8 +44,8 @@ function RegisterContent() {
         }
 
         const formData = new FormData();
-        formData.append('name', initialName);
-        formData.append('email', initialEmail);
+        formData.append('name', name);
+        formData.append('email', email);
         formData.append('cpf', cpf);
         formData.append('password', password);
         formData.append('plan', plan);
@@ -71,7 +73,7 @@ function RegisterContent() {
                     </div>
                     <h2 style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>Cadastro Realizado!</h2>
                     <p style={{ color: '#64748b', fontSize: '1.1rem', marginBottom: '2rem' }}>
-                        Enviamos um link de confirmação para <strong>{initialEmail}</strong>.
+                        Enviamos um link de confirmação para <strong>{email}</strong>.
                         <br />Por favor, verifique sua caixa de entrada para ativar sua conta.
                     </p>
                     <button
@@ -94,20 +96,34 @@ function RegisterContent() {
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-                    {/* Read-only fields from payment */}
+                    {/* Editable fields */}
                     <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#475569' }}>Nome (do pagamento)</label>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '0.75rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#64748b' }}>
-                            <User size={18} />
-                            {initialName || 'N/A'}
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#475569' }}>Seu Nome</label>
+                        <div style={{ position: 'relative' }}>
+                            <User size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                            <input
+                                type="text"
+                                required
+                                placeholder="Seu nome completo"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', border: '1px solid #cbd5e1', borderRadius: '8px', outline: 'none', boxSizing: 'border-box' }}
+                            />
                         </div>
                     </div>
 
                     <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#475569' }}>Email (do pagamento)</label>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '0.75rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#64748b' }}>
-                            <Mail size={18} />
-                            {initialEmail || 'N/A'}
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#475569' }}>Seu Email</label>
+                        <div style={{ position: 'relative' }}>
+                            <Mail size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                            <input
+                                type="email"
+                                required
+                                placeholder="seu@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', border: '1px solid #cbd5e1', borderRadius: '8px', outline: 'none', boxSizing: 'border-box' }}
+                            />
                         </div>
                     </div>
 
