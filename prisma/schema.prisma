@@ -110,8 +110,8 @@ model Purchase {
   id          String   @id @default(cuid())
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId    String   @unique // Assuming one purchase per course for now
-  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId    String?  @unique // Optional for generic credit purchases
+  course      Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade)
   amount      Decimal
   status      String   // PENDING, COMPLETED, FAILED
   createdAt   DateTime @default(now())
