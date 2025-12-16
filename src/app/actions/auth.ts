@@ -24,7 +24,8 @@ export async function registerUser(formData: FormData) {
             email,
             password,
             options: {
-                data: { name, cpf, plan }
+                data: { name, cpf, plan },
+                emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://certificaai.vercel.app'}/login`
             }
         });
 
