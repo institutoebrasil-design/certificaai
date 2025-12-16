@@ -39,8 +39,8 @@ export default function LoginPage() {
                 if (btn) btn.innerText = "Sucesso! Redirecionando...";
 
                 document.cookie = `auth_email=${email}; path=/; max-age=86400`;
-                router.push('/dashboard');
-                router.refresh();
+                // Force hard navigation to bypass client router issues
+                window.location.href = '/dashboard';
             } else {
                 setError(result.error || 'Erro ao entrar.');
                 setLoading(false);
