@@ -103,6 +103,7 @@ export default function LoginPage() {
 
                 <div className={styles.footer}>
                     <p>Ainda não tem conta? <Link href="/offer" className={styles.link}>Escolha um plano</Link></p>
+                    <p style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#ccc' }}>v1.2 (Debug)</p>
                 </div>
             </div>
         </main>
