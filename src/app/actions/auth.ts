@@ -2,11 +2,11 @@
 
 import prisma from '@/lib/prisma';
 import { redirect } from 'next/navigation';
-import { randomUUID } from 'crypto'; // Explicit import to avoid runtime issues
+import { supabase } from '@/lib/supabase';
+import { randomUUID } from 'crypto';
 
 export async function registerUser(formData: FormData) {
-    // Log the attempt
-    console.log("Registering user...");
+    console.log("Registering user via Supabase...");
 
     try {
         const name = formData.get('name') as string;
@@ -16,120 +16,92 @@ export async function registerUser(formData: FormData) {
         const plan = formData.get('plan') as string;
         const acceptedTerms = formData.get('acceptedTerms');
 
-        console.log("Data received:", { name, email, cpf, plan });
+        if (!acceptedTerms) return { success: false, error: "Você deve aceitar os termos e políticas." };
+        if (!email || !password || !name || !cpf) return { success: false, error: "Preencha todos os campos obrigatórios." };
 
-        if (!acceptedTerms) {
-            return { success: false, error: "Você deve aceitar os termos e políticas." };
-        }
-
-        if (!email || !password || !name || !cpf) {
-            return { success: false, error: "Preencha todos os campos obrigatórios." };
-        }
-
-        // Check if user exists
-        const existingUser = await prisma.user.findUnique({
-            where: { email }
+        // 1. Sign up with Supabase (Sends email automatically)
+        const { data: supabaseData, error: supabaseError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: { name, cpf, plan }
+            }
         });
 
-        if (existingUser) {
-            // User exists -> Redirect to login as requested
-            // Note: Redirect throws NEXT_REDIRECT error, so we must let it bubble or handle it.
-            // Better to return a specific flag or let client handle redirect if possible, 
-            // but the requirement was redirect. redirect() acts by throwing.
-            // We should expect this behavior.
-            console.log("User exists, redirecting...");
+        if (supabaseError) {
+            console.error("Supabase SignUp Error:", supabaseError);
+            if (supabaseError.message.includes("already registered") || supabaseError.message.includes("User already exists")) {
+                redirect('/login');
+            }
+            throw new Error(supabaseError.message);
         }
 
-        if (existingUser) {
-            redirect('/login');
+        if (!supabaseData.user) {
+            throw new Error("Falha ao criar usuário no Supabase.");
         }
 
-        // Determine credits based on plan
+        // 2. Sync user to Prisma
         let credits = 1; // Basic
         if (plan === 'pro') credits = 3;
         if (plan === 'premium') credits = 5;
 
-        // Create user
-        // TODO: Hash password before saving in production
-        const verificationToken = randomUUID();
+        const existingUser = await prisma.user.findUnique({ where: { email } });
 
-        console.log("Creating user in DB...");
-        await prisma.user.create({
-            data: {
-                name,
-                email,
-                cpf,
-                password, // Storing plain for logic demo; Use bcrypt in prod
-                credits,
-                role: 'STUDENT',
-                verificationToken,
-                emailVerified: null // Explicitly null
-            }
-        });
-
-        // Simulate sending email (Log for dev)
-        const verificationLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email?token=${verificationToken}`;
-        console.log(`[Mock Email] ---------------------------------------------------`);
-        console.log(`[Mock Email] Para: ${email}`);
-        console.log(`[Mock Email] Assunto: Confirme sua conta na CertificaAI`);
-        console.log(`[Mock Email] Link: ${verificationLink}`);
-        console.log(`[Mock Email] ---------------------------------------------------`);
-
-        return { success: true };
-    } catch (error: any) {
-        // If it's a redirect error, rethrow it
-        if (error.message === 'NEXT_REDIRECT') {
-            throw error;
+        if (!existingUser) {
+            console.log("Syncing user to local DB...");
+            await prisma.user.create({
+                data: {
+                    name,
+                    email,
+                    cpf,
+                    password: 'SUPABASE_AUTH', // Managed by Supabase
+                    credits,
+                    role: 'STUDENT',
+                    emailVerified: null // Supabase handles verification
+                }
+            });
         }
 
-        console.error("Registration error details:", error);
-        return { success: false, error: error.message || "Erro ao criar conta. Tente novamente." };
+        return { success: true };
+
+    } catch (error: any) {
+        if (error.message === 'NEXT_REDIRECT') throw error;
+        console.error("Registration error:", error);
+        return { success: false, error: error.message || "Erro no cadastro." };
     }
 }
 
 export async function verifyUserEmail(token: string) {
-    try {
-        const user = await prisma.user.findFirst({
-            where: { verificationToken: token }
-        });
-
-        if (!user) {
-            return { success: false, error: "Token inválido." };
-        }
-
-        await prisma.user.update({
-            where: { id: user.id },
-            data: {
-                emailVerified: new Date(),
-                verificationToken: null // Consume token
-            }
-        });
-
-        return { success: true };
-    } catch (error) {
-        console.error("Verification error:", error);
-        return { success: false, error: "Falha ao verificar email." };
-    }
+    // Deprecated for Supabase flow
+    return { success: false, error: "Use o link enviado pelo Supabase." };
 }
 
-export async function loginUser(email: string) {
-    const user = await prisma.user.findUnique({
-        where: { email }
+export async function loginUser(email: string, password?: string) {
+    if (!password) return { success: false, error: "Senha necessária." };
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
     });
 
-    if (!user) {
-        return { success: false, error: "Usuário não encontrado." };
+    if (error) {
+        console.error("Supabase Login Error:", error.message);
+        if (error.message.includes("Email not confirmed")) {
+            return { success: false, error: "Email não verificado. Verifique sua caixa de entrada." };
+        }
+        return { success: false, error: "Credenciais inválidas." };
     }
 
-    if (!user.emailVerified) {
-        return { success: false, error: "Email não verificado. Verifique sua caixa de entrada." };
+    if (data.user) {
+        const localUser = await prisma.user.findUnique({ where: { email } });
+        return {
+            success: true,
+            user: {
+                name: localUser?.name || 'User',
+                role: localUser?.role || 'STUDENT'
+            }
+        };
     }
 
-    // In a real app, verify password hash here.
-    // For this demo with plan passwords, we assume the client checked it or we check it here if passed.
-    // Since client passes only email to this specific simplified helper (based on previous client code), 
-    // we might need to adjust signature if we want full server side val.
-    // But keeping it simple for "Email verification check":
-
-    return { success: true, user: { name: user.name, role: user.role } };
+    return { success: false, error: "Erro ao fazer login." };
 }

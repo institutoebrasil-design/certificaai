@@ -25,7 +25,7 @@ export default function LoginPage() {
         // No, we can import server actions in client components.
         const { loginUser } = await import('../actions/auth');
 
-        const result = await loginUser(email);
+        const result = await loginUser(email, password);
 
         if (result.success) {
             document.cookie = `auth_email=${email}; path=/; max-age=86400`;
