@@ -36,6 +36,26 @@ const GENERIC_TEMPLATES = [
     { text: "A segurança em @@ prioriza:", options: ["A prevenção de acidentes e erros", "A pressa", "A economia de materiais a qualquer custo", "O improviso"], correct: 0 },
 ];
 
+export function shuffleOptions(question: any) {
+    const options = [...question.options];
+    const correctOption = options[question.correct];
+
+    // Shuffle
+    for (let i = options.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [options[i], options[j]] = [options[j], options[i]];
+    }
+
+    // Find new correct index
+    const newCorrectIndex = options.indexOf(correctOption);
+
+    return {
+        ...question,
+        options,
+        correct: newCorrectIndex
+    };
+}
+
 export function generateSmartQuestions(courseTitle: string): any[] {
     const t = courseTitle.toLowerCase();
     let baseQuestions: any[] = [];
@@ -64,11 +84,14 @@ export function generateSmartQuestions(courseTitle: string): any[] {
         });
     }
 
-    // 3. Ensure we have exactly 10 and map IDs
-    return baseQuestions.slice(0, 10).map((q, i) => ({
-        id: i + 1,
-        text: q.text,
-        options: q.options, // In a real app, shuffle options here too
-        correct: q.correct
-    }));
+    // 3. Shuffle options for ALL questions and map structure
+    return baseQuestions.slice(0, 10).map((q, i) => {
+        const shuffled = shuffleOptions(q);
+        return {
+            id: i + 1,
+            text: shuffled.text,
+            options: shuffled.options,
+            correct: shuffled.correct
+        };
+    });
 }

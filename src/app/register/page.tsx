@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { registerUser } from '../actions/auth';
 import { CheckCircle, Lock, User, Mail, FileText } from 'lucide-react';
+import { toast } from 'sonner';
 import styles from '../offer/offer.module.css'; // Reusing styles
 
 export default function RegisterPage() {
@@ -17,6 +18,7 @@ export default function RegisterPage() {
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [cpf, setCpf] = useState('');
     const [acceptedTerms, setAcceptedTerms] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
@@ -28,13 +30,13 @@ export default function RegisterPage() {
         setLoading(true);
 
         if (password !== confirmPassword) {
-            setError('As senhas não coincidem.');
+            toast.error('As senhas não coincidem.');
             setLoading(false);
             return;
         }
 
         if (!acceptedTerms) {
-            setError('Você precisa aceitar os termos de uso.');
+            toast.error('Você precisa aceitar os termos de uso.');
             setLoading(false);
             return;
         }
@@ -42,6 +44,7 @@ export default function RegisterPage() {
         const formData = new FormData();
         formData.append('name', initialName);
         formData.append('email', initialEmail);
+        formData.append('cpf', cpf);
         formData.append('password', password);
         formData.append('plan', plan);
         formData.append('acceptedTerms', 'true');
@@ -49,9 +52,12 @@ export default function RegisterPage() {
         const result = await registerUser(formData);
 
         if (result.success) {
+            toast.success('Cadastro realizado com sucesso!');
             setSuccess(true);
         } else {
-            setError(result.error || 'Erro desconhecido.');
+            const msg = result.error || 'Erro desconhecido.';
+            setError(msg); // Keep internal state for fallback
+            toast.error(msg);
         }
         setLoading(false);
     };
@@ -102,6 +108,30 @@ export default function RegisterPage() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '0.75rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#64748b' }}>
                             <Mail size={18} />
                             {initialEmail || 'N/A'}
+                        </div>
+                    </div>
+
+                    {/* CPF Field */}
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#475569' }}>Seu CPF</label>
+                        <div style={{ position: 'relative' }}>
+                            <FileText size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                            <input
+                                type="text"
+                                required
+                                placeholder="000.000.000-00"
+                                value={cpf}
+                                onChange={(e) => {
+                                    // Basic mask logic
+                                    let v = e.target.value.replace(/\D/g, '');
+                                    if (v.length > 11) v = v.substring(0, 11);
+                                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                                    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                                    setCpf(v);
+                                }}
+                                style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', border: '1px solid #cbd5e1', borderRadius: '8px', outline: 'none', boxSizing: 'border-box' }}
+                            />
                         </div>
                     </div>
 

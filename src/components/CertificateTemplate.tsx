@@ -22,13 +22,14 @@ interface Module {
 interface CertificateProps {
     userName: string;
     courseName: string;
+    cpf?: string;
     date: string;
     code: string;
     duration: number;
     modules: Module[];
 }
 
-export default function CertificateTemplate({ userName, courseName, date, code, duration, modules }: CertificateProps) {
+export default function CertificateTemplate({ userName, courseName, cpf, date, code, duration, modules }: CertificateProps) {
     return (
         <div className={`certificate-container ${montserrat.className}`}>
 
@@ -62,7 +63,7 @@ export default function CertificateTemplate({ userName, courseName, date, code, 
                 <h2 className="nome">{userName.toUpperCase()}</h2>
 
                 <p className="texto">
-                    portador(a) do RG/CPF nº <strong>000.000.000-00</strong>, o presente certificado por haver concluído
+                    portador(a) do RG/CPF nº <strong>{cpf || '000.000.000-00'}</strong>, o presente certificado por haver concluído
                     o Curso de Qualificação Profissional em:
                 </p>
 

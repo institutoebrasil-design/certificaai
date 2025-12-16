@@ -6,14 +6,16 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:C:/Users/rmelov/Downloads/certificaai/dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String    @unique
+  cpf           String?   // Added for certificate identification
   password      String?
   image         String?
   role          String    @default("STUDENT") // STUDENT, ADMIN, AFFILIATE

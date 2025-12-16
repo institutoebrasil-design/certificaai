@@ -26,6 +26,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ id
     return (
         <CertificateTemplate
             userName={certificate.user.name || 'Aluno IEB'}
+            cpf={certificate.user.cpf || '000.000.000-00'}
             courseName={certificate.course.title}
             date={certificate.issuedAt.toLocaleDateString('pt-BR')}
             code={certificate.code}

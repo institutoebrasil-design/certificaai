@@ -6,6 +6,7 @@ import { CheckCircle, XCircle, Award, AlertCircle, Clock, X } from 'lucide-react
 import styles from './exam.module.css';
 import { generateSmartQuestions } from '@/utils/questionGenerator';
 import { consumeDownloadCredit } from '@/app/actions/certificate';
+import { generateAiExam } from '@/app/actions/exam';
 
 export default function ExamClient({ title, courseId }: { title: string, courseId: string }) {
     const router = useRouter();
@@ -15,6 +16,7 @@ export default function ExamClient({ title, courseId }: { title: string, courseI
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(60 * 60);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     // Toast State
     const [toast, setToast] = useState<{ show: boolean, message: string, type: 'success' | 'error' }>({
@@ -27,7 +29,30 @@ export default function ExamClient({ title, courseId }: { title: string, courseI
     };
 
     useEffect(() => {
-        setQuestions(generateSmartQuestions(title));
+        let mounted = true;
+        const loadQuestions = async () => {
+            setIsLoading(true);
+            try {
+                // Try AI first
+                const aiQuestions = await generateAiExam(title);
+
+                if (aiQuestions && aiQuestions.length > 0) {
+                    if (mounted) setQuestions(aiQuestions);
+                } else {
+                    // Fallback to mock
+                    console.log("Using fallback questions");
+                    if (mounted) setQuestions(generateSmartQuestions(title));
+                }
+            } catch (error) {
+                console.error("Error loading exam:", error);
+                if (mounted) setQuestions(generateSmartQuestions(title));
+            } finally {
+                if (mounted) setIsLoading(false);
+            }
+        };
+
+        loadQuestions();
+        return () => { mounted = false; };
     }, [title]);
 
     useEffect(() => {
@@ -180,31 +205,40 @@ export default function ExamClient({ title, courseId }: { title: string, courseI
                         <p>Você tem <b>60 minutos</b>. A prova será finalizada automaticamente quando o tempo acabar.</p>
                     </div>
 
-                    {questions.map((q, index) => (
-                        <div key={q.id} className={styles.questionCard}>
-                            <h3 className={styles.questionText}>{q.text}</h3>
-                            <div className={styles.optionsGrid}>
-                                {q.options.map((opt: string, optIndex: number) => (
-                                    <button
-                                        key={optIndex}
-                                        className={`${styles.option} ${answers[q.id] === optIndex ? styles.selected : ''} `}
-                                        onClick={() => handleSelect(q.id, optIndex)}
-                                    >
-                                        <span className={styles.optionLabel}>{['A', 'B', 'C', 'D'][optIndex]}</span>
-                                        {opt}
-                                    </button>
-                                ))}
-                            </div>
+                    {isLoading ? (
+                        <div style={{ textAlign: 'center', padding: '40px', color: '#64748b' }}>
+                            <div className={styles.spinner}></div>
+                            <p>A Inteligência Artificial está elaborando sua prova personalizada...</p>
                         </div>
-                    ))}
+                    ) : (
+                        <>
+                            {questions.map((q, index) => (
+                                <div key={q.id} className={styles.questionCard}>
+                                    <h3 className={styles.questionText}>{q.text}</h3>
+                                    <div className={styles.optionsGrid}>
+                                        {q.options.map((opt: string, optIndex: number) => (
+                                            <button
+                                                key={optIndex}
+                                                className={`${styles.option} ${answers[q.id] === optIndex ? styles.selected : ''} `}
+                                                onClick={() => handleSelect(q.id, optIndex)}
+                                            >
+                                                <span className={styles.optionLabel}>{['A', 'B', 'C', 'D'][optIndex]}</span>
+                                                {opt}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
 
-                    <button
-                        className={styles.submitButton}
-                        onClick={handleSubmit}
-                        disabled={Object.keys(answers).length < questions.length}
-                    >
-                        Finalizar Avaliação
-                    </button>
+                            <button
+                                className={styles.submitButton}
+                                onClick={handleSubmit}
+                                disabled={Object.keys(answers).length < questions.length}
+                            >
+                                Finalizar Avaliação
+                            </button>
+                        </>
+                    )}
                 </div>
             )}
         </main>

@@ -1,28 +1,25 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
-const prisma = new PrismaClient();
+import { cookies } from 'next/headers';
 
-// Mock user ID for now as we don't have real auth yet. 
-// In a real app, this would come from the session.
-// We will grab the first user found or a specific test user.
+// Get user from cookie
 async function getUserId() {
-    // Hardcoded for testing validation as requested
-    const email = 'rodrigoviana50@gmail.com';
+    const cookieStore = await cookies();
+    const authEmail = cookieStore.get('auth_email')?.value;
+
+    if (!authEmail) {
+        throw new Error("Usuário não autenticado.");
+    }
+
     let user = await prisma.user.findUnique({
-        where: { email }
+        where: { email: authEmail }
     });
 
     if (!user) {
-        user = await prisma.user.create({
-            data: {
-                email,
-                name: 'Rodrigo Viana',
-                credits: 1 // Default to Basic as requested
-            }
-        });
+        throw new Error("Usuário não encontrado.");
     }
     return user.id;
 }

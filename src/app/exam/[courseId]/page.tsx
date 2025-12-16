@@ -10,12 +10,17 @@ async function getCourse(id: string) {
     });
 }
 
+import { redirect } from 'next/navigation';
+
 export default async function ExamPage({ params }: { params: Promise<{ courseId: string }> }) {
     const { courseId } = await params;
     const course = await getCourse(courseId);
 
-    // If course not found, could show 404, but for now fallback
-    const title = course?.title || "Certificação Geral";
+    if (!course) {
+        redirect('/dashboard');
+    }
 
-    return <ExamClient title={course.title} courseId={course.id} />;
+    const title = course.title || "Certificação Geral";
+
+    return <ExamClient title={title} courseId={course.id} />;
 }

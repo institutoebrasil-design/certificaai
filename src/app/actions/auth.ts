@@ -1,13 +1,12 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { redirect } from 'next/navigation';
-
-const prisma = new PrismaClient();
 
 export async function registerUser(formData: FormData) {
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
+    const cpf = formData.get('cpf') as string;
     const password = formData.get('password') as string;
     const plan = formData.get('plan') as string;
     const acceptedTerms = formData.get('acceptedTerms');
@@ -16,7 +15,7 @@ export async function registerUser(formData: FormData) {
         return { success: false, error: "Você deve aceitar os termos e políticas." };
     }
 
-    if (!email || !password || !name) {
+    if (!email || !password || !name || !cpf) {
         return { success: false, error: "Preencha todos os campos obrigatórios." };
     }
 
@@ -26,7 +25,8 @@ export async function registerUser(formData: FormData) {
     });
 
     if (existingUser) {
-        return { success: false, error: "Este email já está cadastrado." };
+        // User exists -> Redirect to login as requested
+        redirect('/login');
     }
 
     // Determine credits based on plan
@@ -41,6 +41,7 @@ export async function registerUser(formData: FormData) {
             data: {
                 name,
                 email,
+                cpf,
                 password, // Storing plain for logic demo; Use bcrypt in prod
                 credits,
                 role: 'STUDENT'
@@ -51,8 +52,8 @@ export async function registerUser(formData: FormData) {
         console.log(`[Mock Email] Enviando confirmação para ${email}...`);
 
         return { success: true };
-    } catch (error) {
+    } catch (error: any) {
         console.error("Registration error:", error);
-        return { success: false, error: "Erro ao criar conta. Tente novamente." };
+        return { success: false, error: error.message || "Erro ao criar conta. Tente novamente." };
     }
 }

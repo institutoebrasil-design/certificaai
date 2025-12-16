@@ -1,11 +1,9 @@
 import Image from 'next/image';
-import { PrismaClient } from '@prisma/client';
-import { Award, Download } from 'lucide-react';
 import Link from 'next/link';
+import prisma from '@/lib/prisma';
 import DashboardNav from '../../components/DashboardNav';
-import styles from '../dashboard/dashboard.module.css';
-
-const prisma = new PrismaClient();
+import { Download, Calendar, Award } from 'lucide-react';
+import styles from '../dashboard/dashboard.module.css'; // Reutilizando estilos
 
 async function getUserCertificates(email: string) {
     const user = await prisma.user.findUnique({

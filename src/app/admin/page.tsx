@@ -1,13 +1,10 @@
 import Image from 'next/image';
-import { PrismaClient } from '@prisma/client';
+import { redirect } from 'next/navigation';
+import prisma from '@/lib/prisma';
 import DashboardNav from '../../components/DashboardNav';
 import AdminClient from './AdminClient';
 import styles from '../dashboard/dashboard.module.css';
-import { getAllUsers } from '../actions/admin';
-import { redirect } from 'next/navigation';
-
-const prisma = new PrismaClient();
-
+import { getAllUsers, getAllCertificates, getAllCourses } from '../actions/admin';
 import { cookies } from 'next/headers';
 
 async function getUser() {
@@ -28,6 +25,8 @@ export default async function AdminPage() {
     }
 
     const users = await getAllUsers();
+    const certificates = await getAllCertificates();
+    const courses = await getAllCourses();
 
     return (
         <main className={styles.container}>
@@ -55,7 +54,7 @@ export default async function AdminPage() {
                 <h2 className={styles.sectionTitle} style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '10px' }}>
                     Painel Administrativo
                 </h2>
-                <AdminClient initialUsers={users} />
+                <AdminClient initialUsers={users} initialCertificates={certificates} initialCourses={courses} />
             </div>
         </main>
     );

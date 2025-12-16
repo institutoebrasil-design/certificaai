@@ -1,11 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import DashboardClient from './DashboardClient';
 import styles from './dashboard.module.css';
 import DashboardNav from '../../components/DashboardNav';
-
-const prisma = new PrismaClient();
 
 async function getCourses() {
     const courses = await prisma.course.findMany({
