@@ -78,31 +78,44 @@ export async function verifyUserEmail(token: string) {
 }
 
 export async function loginUser(email: string, password?: string) {
-    if (!password) return { success: false, error: "Senha necessária." };
+    console.log(`[loginUser] START for ${email}`);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-    });
-
-    if (error) {
-        console.error("Supabase Login Error:", error.message);
-        if (error.message.includes("Email not confirmed")) {
-            return { success: false, error: "Email não verificado. Verifique sua caixa de entrada." };
-        }
-        return { success: false, error: "Credenciais inválidas." };
+    // Critical Environment Check
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        console.error("[loginUser] Critical: Supabase Env Vars missing on Server!");
+        return { success: false, error: "Erro de Configuração do Servidor (Chaves ausentes)." };
     }
 
-    if (data.user) {
-        const localUser = await prisma.user.findUnique({ where: { email } });
-        return {
-            success: true,
-            user: {
-                name: localUser?.name || 'User',
-                role: localUser?.role || 'STUDENT'
+    if (!password) {
+        return { success: false, error: "Senha necessária." };
+    }
+
+    try {
+        console.log("[loginUser] Calling Supabase signIn...");
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+        console.log("[loginUser] Supabase response received.");
+
+        if (error) {
+            console.error("[loginUser] Supabase Error:", error.message);
+            if (error.message.includes("Email not confirmed")) {
+                return { success: false, error: "Email não verificado. Verifique sua caixa de entrada." };
             }
-        };
-    }
+            return { success: false, error: "Credenciais inválidas." };
+        }
 
-    return { success: false, error: "Erro ao fazer login." };
-}
+        if (data.user) {
+            const localUser = await prisma.user.findUnique({ where: { email } });
+            return {
+                success: true,
+                user: {
+                    name: localUser?.name || 'User',
+                    role: localUser?.role || 'STUDENT'
+                }
+            };
+        }
+
+        return { success: false, error: "Erro ao fazer login." };
+    }
