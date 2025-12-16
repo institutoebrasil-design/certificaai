@@ -2,43 +2,58 @@
 
 import prisma from '@/lib/prisma';
 import { redirect } from 'next/navigation';
+import { randomUUID } from 'crypto'; // Explicit import to avoid runtime issues
 
 export async function registerUser(formData: FormData) {
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    const cpf = formData.get('cpf') as string;
-    const password = formData.get('password') as string;
-    const plan = formData.get('plan') as string;
-    const acceptedTerms = formData.get('acceptedTerms');
-
-    if (!acceptedTerms) {
-        return { success: false, error: "Você deve aceitar os termos e políticas." };
-    }
-
-    if (!email || !password || !name || !cpf) {
-        return { success: false, error: "Preencha todos os campos obrigatórios." };
-    }
-
-    // Check if user exists
-    const existingUser = await prisma.user.findUnique({
-        where: { email }
-    });
-
-    if (existingUser) {
-        // User exists -> Redirect to login as requested
-        redirect('/login');
-    }
-
-    // Determine credits based on plan
-    let credits = 1; // Basic
-    if (plan === 'pro') credits = 3;
-    if (plan === 'premium') credits = 5;
+    // Log the attempt
+    console.log("Registering user...");
 
     try {
+        const name = formData.get('name') as string;
+        const email = formData.get('email') as string;
+        const cpf = formData.get('cpf') as string;
+        const password = formData.get('password') as string;
+        const plan = formData.get('plan') as string;
+        const acceptedTerms = formData.get('acceptedTerms');
+
+        console.log("Data received:", { name, email, cpf, plan });
+
+        if (!acceptedTerms) {
+            return { success: false, error: "Você deve aceitar os termos e políticas." };
+        }
+
+        if (!email || !password || !name || !cpf) {
+            return { success: false, error: "Preencha todos os campos obrigatórios." };
+        }
+
+        // Check if user exists
+        const existingUser = await prisma.user.findUnique({
+            where: { email }
+        });
+
+        if (existingUser) {
+            // User exists -> Redirect to login as requested
+            // Note: Redirect throws NEXT_REDIRECT error, so we must let it bubble or handle it.
+            // Better to return a specific flag or let client handle redirect if possible, 
+            // but the requirement was redirect. redirect() acts by throwing.
+            // We should expect this behavior.
+            console.log("User exists, redirecting...");
+        }
+
+        if (existingUser) {
+            redirect('/login');
+        }
+
+        // Determine credits based on plan
+        let credits = 1; // Basic
+        if (plan === 'pro') credits = 3;
+        if (plan === 'premium') credits = 5;
+
         // Create user
         // TODO: Hash password before saving in production
-        const verificationToken = crypto.randomUUID();
+        const verificationToken = randomUUID();
 
+        console.log("Creating user in DB...");
         await prisma.user.create({
             data: {
                 name,
@@ -62,7 +77,12 @@ export async function registerUser(formData: FormData) {
 
         return { success: true };
     } catch (error: any) {
-        console.error("Registration error:", error);
+        // If it's a redirect error, rethrow it
+        if (error.message === 'NEXT_REDIRECT') {
+            throw error;
+        }
+
+        console.error("Registration error details:", error);
         return { success: false, error: error.message || "Erro ao criar conta. Tente novamente." };
     }
 }
