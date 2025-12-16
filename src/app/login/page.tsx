@@ -21,11 +21,18 @@ export default function LoginPage() {
         setError('');
 
         try {
-            // Call server action
-            const result = await loginUser(email, password);
+            // Create a timeout promise
+            const timeoutPromise = new Promise<{ success: boolean; error: string }>((_, reject) =>
+                setTimeout(() => reject(new Error('Timeout')), 15000)
+            );
+
+            // Race between server action and timeout
+            const result = await Promise.race([
+                loginUser(email, password),
+                timeoutPromise
+            ]) as { success: boolean; error?: string };
 
             if (result.success) {
-                // Set legacy auth cookie for client-side checks/middleware compatibility
                 document.cookie = `auth_email=${email}; path=/; max-age=86400`;
                 router.push('/dashboard');
                 router.refresh();
@@ -33,9 +40,13 @@ export default function LoginPage() {
                 setError(result.error || 'Erro ao entrar.');
                 setLoading(false);
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error("Login call failed:", err);
-            setError("Erro de conexão. Tente novamente.");
+            if (err.message === 'Timeout') {
+                setError("O servidor demorou muito para responder. Verifique sua conexão ou tente novamente.");
+            } else {
+                setError("Erro de conexão. Tente novamente.");
+            }
             setLoading(false);
         }
     };

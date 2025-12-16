@@ -83,7 +83,11 @@ export async function loginUser(email: string, password?: string) {
     // Critical Environment Check
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
         console.error("[loginUser] Critical: Supabase Env Vars missing on Server!");
-        return { success: false, error: "Erro de Configuração do Servidor (Chaves ausentes)." };
+        return { success: false, error: "Erro de Servidor (Chaves Supabase ausentes)." };
+    }
+    if (!process.env.DATABASE_URL) {
+        console.error("[loginUser] Critical: DATABASE_URL missing on Server!");
+        return { success: false, error: "Erro de Servidor (Banco de Dados não conectado)." };
     }
 
     if (!password) {
