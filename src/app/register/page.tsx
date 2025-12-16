@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { registerUser } from '../actions/auth';
 import { CheckCircle, Lock, User, Mail, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import styles from '../offer/offer.module.css'; // Reusing styles
 
-export default function RegisterPage() {
+function RegisterContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -207,5 +207,13 @@ export default function RegisterPage() {
                 </form>
             </div>
         </div>
+    );
+}
+
+export default function RegisterPage() {
+    return (
+        <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Carregando...</div>}>
+            <RegisterContent />
+        </Suspense>
     );
 }
