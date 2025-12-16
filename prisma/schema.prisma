@@ -30,6 +30,10 @@ model User {
   // Affiliate
   affiliateCode String?   @unique
   referredBy    String?   // ID of the affiliate who referred this user
+
+  // Verification
+  emailVerified DateTime?
+  verificationToken String?
 }
 
 model Course {

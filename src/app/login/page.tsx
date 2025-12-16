@@ -11,19 +11,30 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
 
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState(''); // Add state for password
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        setError('');
 
-        // Simple cookie logic for demo
-        document.cookie = `auth_email=${email}; path=/; max-age=86400`; // 1 day
+        // In a real app, we would send password to server to verify.
+        // Here we just check if user exists and is verified.
+        // We import loginUser dynamically to avoid server component issues if any?
+        // No, we can import server actions in client components.
+        const { loginUser } = await import('../actions/auth');
 
-        // Mock login delay
-        setTimeout(() => {
+        const result = await loginUser(email);
+
+        if (result.success) {
+            document.cookie = `auth_email=${email}; path=/; max-age=86400`;
             router.push('/dashboard');
-            router.refresh(); // Refresh to ensure server components pick up cookie
-        }, 1500);
+            router.refresh();
+        } else {
+            setError(result.error || 'Erro ao entrar.');
+            setLoading(false);
+        }
     };
 
     return (
@@ -33,6 +44,12 @@ export default function LoginPage() {
                     <h1 className={styles.title}>Bem-vindo de volta</h1>
                     <p className={styles.subtitle}>Acesse sua área do aluno</p>
                 </div>
+
+                {error && (
+                    <div style={{ padding: '0.75rem', marginBottom: '1rem', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '8px', fontSize: '0.9rem', textAlign: 'center' }}>
+                        {error}
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.inputGroup}>
@@ -54,6 +71,8 @@ export default function LoginPage() {
                             placeholder="Sua senha"
                             className={styles.input}
                             required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
