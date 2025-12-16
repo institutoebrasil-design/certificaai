@@ -122,4 +122,8 @@ export async function loginUser(email: string, password?: string) {
         }
 
         return { success: false, error: "Erro ao fazer login." };
+    } catch (err) {
+        console.error("[loginUser] Unexpected error:", err);
+        return { success: false, error: "Erro interno no servidor." };
     }
+}
