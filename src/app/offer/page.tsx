@@ -61,7 +61,7 @@ export default function OfferPage() {
 
             {/* Advantages Section */}
             <section className={styles.advantagesSection}>
-                <h2 className={styles.sectionTitle}>Por que a IEB Certifica IA?</h2>
+                <h2 className={styles.sectionTitle}>Por que o IEB Certifica IA?</h2>
                 <div className={styles.grid}>
                     <div className={styles.card}>
                         <div className={styles.iconWrapper}>
@@ -154,7 +154,7 @@ export default function OfferPage() {
                         </div>
                         <ul className={styles.featuresList}>
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> 1 Certificação</li>
-                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Carga Horária: 40h</li>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Carga Horária: 60h</li>
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Acesso à Plataforma</li>
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Suporte por Email</li>
                         </ul>
@@ -163,16 +163,17 @@ export default function OfferPage() {
 
                     {/* Professional */}
                     <div className={`${styles.pricingCard} ${styles.popularCard}`}>
-                        <div className={styles.popularBadge}>MAIS VENDIDO</div>
+                        <div className={styles.popularBadge}>RECOMENDADO</div>
                         <h3 className={styles.planName}>Profissional</h3>
                         <div className={styles.price}>
                             <span className={styles.currency}>R$</span>99,90
                         </div>
                         <ul className={styles.featuresList}>
-                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> 3 Certificação</li>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> 3 Certificações</li>
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Carga Horária: 60h cada</li>
-                            <li className={styles.featureItem}><Star size={20} color="#fbbf24" /> Pack Prompts ChatGPT</li>
-                            <li className={styles.featureItem}><Star size={20} color="#fbbf24" /> Guia LinkedIn IA</li>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Acesso à Plataforma</li>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Suporte por Email</li>
+                            <li className={styles.featureItem}><Star size={20} color="#fbbf24" /> Ebooks Educacionais (Em Breve)</li>
                         </ul>
                         <Link href="https://www.abacatepay.com/pay/bill_stnGXHzHF6pDSu1zMCkQLhcU" className={`${styles.ctaButton} ${styles.primaryButton}`} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Garantir Vaga</Link>
                     </div>
@@ -185,10 +186,11 @@ export default function OfferPage() {
                         </div>
                         <ul className={styles.featuresList}>
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> 5 Certificações</li>
-                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Carga Horária: 80h cada</li>
-                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Consultoria Automática</li>
-                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Todos os Bônus</li>
-                            <li className={styles.featureItem}><Unlock size={20} color="#a855f7" /> Acesso Antecipado</li>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Carga Horária: 60h cada</li>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Acesso à Plataforma</li>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Suporte por Email</li>
+                            <li className={styles.featureItem}><Star size={20} color="#fbbf24" /> Ebooks Educacionais (Em Breve)</li>
+                            <li className={styles.featureItem}><Unlock size={20} color="#a855f7" /> Auxiliar de Currículo (Em Breve)</li>
                         </ul>
                         <Link href="https://www.abacatepay.com/pay/bill_jrXZs4dsxaKgn0UPxrWeJ2zG" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Quero Tudo</Link>
                     </div>
