@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Check, Star, Shield, Clock, Award, Users, Unlock } from 'lucide-react';
+import { Check, Star, Shield, Clock, Award, Unlock } from 'lucide-react';
 import styles from './offer.module.css';
 
 export default function OfferPage() {
