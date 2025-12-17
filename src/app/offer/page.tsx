@@ -102,7 +102,7 @@ export default function OfferPage() {
                 <div className={styles.grid}>
                     <div className={styles.testimonialCard}>
                         <div className={styles.userInfo}>
-                            <img src="/avatars/user1.jpg" alt="Aluno" className={styles.userAvatar} style={{ background: '#4ade80' }} />
+                            <img src="/avatars/user1.png" alt="Aluno" className={styles.userAvatar} style={{ background: '#4ade80' }} />
                             <div>
                                 <span className={styles.userName}>Ricardo Silva</span>
                                 <span className={styles.userRole}>Desenvolvedor Web</span>
@@ -115,7 +115,7 @@ export default function OfferPage() {
                     </div>
                     <div className={styles.testimonialCard}>
                         <div className={styles.userInfo}>
-                            <img src="/avatars/user2.jpg" alt="Aluna" className={styles.userAvatar} style={{ background: '#f472b6' }} />
+                            <img src="/avatars/user2.png" alt="Aluna" className={styles.userAvatar} style={{ background: '#f472b6' }} />
                             <div>
                                 <span className={styles.userName}>Amanda Costa</span>
                                 <span className={styles.userRole}>Analista de Marketing</span>
@@ -128,7 +128,7 @@ export default function OfferPage() {
                     </div>
                     <div className={styles.testimonialCard}>
                         <div className={styles.userInfo}>
-                            <img src="/avatars/user3.jpg" alt="Aluno" className={styles.userAvatar} style={{ background: '#60a5fa' }} />
+                            <img src="/avatars/user3.png" alt="Aluno" className={styles.userAvatar} style={{ background: '#60a5fa' }} />
                             <div>
                                 <span className={styles.userName}>Carlos Mendes</span>
                                 <span className={styles.userRole}>Gestor de Projetos</span>
