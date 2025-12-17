@@ -158,7 +158,7 @@ export default function OfferPage() {
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Acesso à Plataforma</li>
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Suporte por Email</li>
                         </ul>
-                        <Link href="https://www.abacatepay.com/pay/bill_KDrq203TKKzn0TZSm3AQGYQb" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Começar Agora</Link>
+                        <Link href="https://www.abacatepay.com/pay/bill_QApJc1sDxRPEhP5GQ4cytgwc" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Começar Agora</Link>
                     </div>
 
                     {/* Professional */}
@@ -174,7 +174,7 @@ export default function OfferPage() {
                             <li className={styles.featureItem}><Star size={20} color="#fbbf24" /> Pack Prompts ChatGPT</li>
                             <li className={styles.featureItem}><Star size={20} color="#fbbf24" /> Guia LinkedIn IA</li>
                         </ul>
-                        <Link href="https://www.abacatepay.com/pay/bill_ThpKLHjrY41WQFafuyPBM0JP" className={`${styles.ctaButton} ${styles.primaryButton}`} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Garantir Vaga</Link>
+                        <Link href="https://www.abacatepay.com/pay/bill_stnGXHzHF6pDSu1zMCkQLhcU" className={`${styles.ctaButton} ${styles.primaryButton}`} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Garantir Vaga</Link>
                     </div>
 
                     {/* Premium */}
@@ -190,7 +190,7 @@ export default function OfferPage() {
                             <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Todos os Bônus</li>
                             <li className={styles.featureItem}><Unlock size={20} color="#a855f7" /> Acesso Antecipado</li>
                         </ul>
-                        <Link href="https://www.abacatepay.com/pay/bill_43UTPSXAKfesAMN6USx4jp3E" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Quero Tudo</Link>
+                        <Link href="https://www.abacatepay.com/pay/bill_jrXZs4dsxaKgn0UPxrWeJ2zG" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Quero Tudo</Link>
                     </div>
                 </div>
             </section>
