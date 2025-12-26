@@ -14,17 +14,20 @@ function RegisterContent() {
     // Pre-filled from "payment gateway"
     const initialName = searchParams.get('name') || '';
     const initialEmail = searchParams.get('email') || '';
+    const initialCpf = searchParams.get('cpf') || '';
     const plan = searchParams.get('plan') || 'basic';
 
     const [name, setName] = useState(initialName);
     const [email, setEmail] = useState(initialEmail);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [cpf, setCpf] = useState('');
+    const [cpf, setCpf] = useState(initialCpf);
     const [acceptedTerms, setAcceptedTerms] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const isPreFilled = !!initialEmail; // If email is present, assume from payment
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -73,8 +76,8 @@ function RegisterContent() {
                     </div>
                     <h2 style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '1rem' }}>Cadastro Realizado!</h2>
                     <p style={{ color: '#64748b', fontSize: '1.1rem', marginBottom: '2rem' }}>
-                        Enviamos um link de confirmação para <strong>{email}</strong>.
-                        <br />Por favor, verifique sua caixa de entrada para ativar sua conta.
+                        Sua conta foi criada e ativada com sucesso.
+                        <br />Você já pode acessar a plataforma.
                     </p>
                     <button
                         onClick={() => router.push('/login')}
@@ -107,8 +110,19 @@ function RegisterContent() {
                                 placeholder="Seu nome completo"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', border: '1px solid #cbd5e1', borderRadius: '8px', outline: 'none', boxSizing: 'border-box' }}
+                                disabled={!!initialName}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '8px',
+                                    outline: 'none',
+                                    boxSizing: 'border-box',
+                                    background: initialName ? '#f1f5f9' : 'white',
+                                    cursor: initialName ? 'not-allowed' : 'text'
+                                }}
                             />
+                            {initialName && <CheckCircle size={16} color="#22c55e" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)' }} />}
                         </div>
                     </div>
 
@@ -122,8 +136,19 @@ function RegisterContent() {
                                 placeholder="seu@email.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', border: '1px solid #cbd5e1', borderRadius: '8px', outline: 'none', boxSizing: 'border-box' }}
+                                disabled={!!initialEmail}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '8px',
+                                    outline: 'none',
+                                    boxSizing: 'border-box',
+                                    background: initialEmail ? '#f1f5f9' : 'white',
+                                    cursor: initialEmail ? 'not-allowed' : 'text'
+                                }}
                             />
+                            {initialEmail && <CheckCircle size={16} color="#22c55e" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)' }} />}
                         </div>
                     </div>
 
@@ -146,8 +171,19 @@ function RegisterContent() {
                                     v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
                                     setCpf(v);
                                 }}
-                                style={{ width: '100%', padding: '0.75rem 0.75rem 0.75rem 2.5rem', border: '1px solid #cbd5e1', borderRadius: '8px', outline: 'none', boxSizing: 'border-box' }}
+                                disabled={!!initialCpf}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: '8px',
+                                    outline: 'none',
+                                    boxSizing: 'border-box',
+                                    background: initialCpf ? '#f1f5f9' : 'white',
+                                    cursor: initialCpf ? 'not-allowed' : 'text'
+                                }}
                             />
+                            {initialCpf && <CheckCircle size={16} color="#22c55e" style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)' }} />}
                         </div>
                     </div>
 

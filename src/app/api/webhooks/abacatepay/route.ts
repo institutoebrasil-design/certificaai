@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { supabaseAdmin } from '@/lib/supabase-admin';
 
 // Map bill IDs (from URL) to credit amounts
 const PLAN_CREDITS: Record<string, number> = {
@@ -81,37 +80,8 @@ export async function POST(req: Request) {
                     if (!user) {
                         console.log('[Webhook] Creating new user for', email);
 
-                        // --- Supabase Invite Logic START ---
-                        try {
-                            const hasAdminKey = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
-                            console.log(`[Webhook] Has SUPABASE_SERVICE_ROLE_KEY: ${hasAdminKey}`);
-
-                            if (!hasAdminKey) {
-                                console.error('[Webhook] CRITICAL: SUPABASE_SERVICE_ROLE_KEY is missing! Cannot invite user.');
-                            }
-
-                            const { data: inviteData, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
-                                data: { name: customer.name || 'Aluno' },
-                                redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://certificaai.vercel.app'}/reset-password` // Route to handle password setting
-                            });
-
-                            if (inviteError) {
-                                console.error('[Webhook] Supabase Invite Error:', inviteError.message);
-                                // If user already exists in Supabase but not in Prisma (edge case), try sending a password reset
-                                if (inviteError.message.includes('already registered') || inviteError.status === 422) {
-                                    console.log('[Webhook] User exists in Supabase, sending password reset instead...');
-                                    const { error: resetError } = await supabaseAdmin.auth.resetPasswordForEmail(email, {
-                                        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://certificaai.vercel.app'}/reset-password`
-                                    });
-                                    if (resetError) console.error('[Webhook] Supabase Reset Error:', resetError.message);
-                                }
-                            } else {
-                                console.log('[Webhook] Supabase Invite Sent:', inviteData);
-                            }
-                        } catch (supaError) {
-                            console.error('[Webhook] Supabase Admin Exception:', supaError);
-                        }
-                        // --- Supabase Invite Logic END ---
+                        // Invite logic removed as per new flow.
+                        // User will register manually via /register page.
 
                         user = await prisma.user.create({
                             data: {
