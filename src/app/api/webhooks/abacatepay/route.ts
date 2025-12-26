@@ -22,7 +22,11 @@ export async function POST(req: Request) {
         }
 
         // 1. Log event
-        console.log('[Webhook] Received event:', event?.eventId, event?.type);
+        console.log('[Webhook] Raw Body Type:', typeof bodyText);
+        console.log('[Webhook] Raw Body Snippet:', bodyText.substring(0, 200));
+        console.log('[Webhook] Parsed Event keys:', event ? Object.keys(event) : 'null');
+        console.log('[Webhook] Received event ID:', event?.eventId);
+        console.log('[Webhook] Received event TYPE:', event?.type);
 
         // Security check (Optional: verify secret if available)
         // const signature = req.headers.get('abacatepay-signature');
@@ -66,6 +70,13 @@ export async function POST(req: Request) {
 
                         // --- Supabase Invite Logic START ---
                         try {
+                            const hasAdminKey = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
+                            console.log(`[Webhook] Has SUPABASE_SERVICE_ROLE_KEY: ${hasAdminKey}`);
+
+                            if (!hasAdminKey) {
+                                console.error('[Webhook] CRITICAL: SUPABASE_SERVICE_ROLE_KEY is missing! Cannot invite user.');
+                            }
+
                             const { data: inviteData, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
                                 data: { name: customer.name || 'Aluno' },
                                 redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://certificaai.vercel.app'}/reset-password` // Route to handle password setting
