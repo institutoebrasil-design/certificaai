@@ -25,24 +25,37 @@ export async function POST(req: Request) {
         console.log('[Webhook] Raw Body Type:', typeof bodyText);
         console.log('[Webhook] Raw Body Snippet:', bodyText.substring(0, 200));
         console.log('[Webhook] Parsed Event keys:', event ? Object.keys(event) : 'null');
-        console.log('[Webhook] Received event ID:', event?.eventId);
-        console.log('[Webhook] Received event TYPE:', event?.type);
 
-        // Security check (Optional: verify secret if available)
-        // const signature = req.headers.get('abacatepay-signature');
+        // Normalize Event Type
+        const eventType = event.type || event.event;
+        console.log('[Webhook] Detected Event TYPE:', eventType);
 
-        // 2. Handle 'BILLING_PAID'
-        if (event.type === 'BILLING_PAID') {
-            if (!event.data) {
+        // 2. Handle 'BILLING_PAID' (AbacatePay sends 'billing.paid')
+        if (eventType === 'BILLING_PAID' || eventType === 'billing.paid') {
+
+            // Normalize Data Structure
+            let payloadData = event.data;
+            if (payloadData?.billing) {
+                // Flatten structure: data.billing -> data
+                payloadData = {
+                    ...payloadData.billing,
+                    customer: payloadData.billing.customer || payloadData.customer
+                };
+            }
+
+            if (!payloadData) {
                 console.error('[Webhook] No data in event payload:', JSON.stringify(event));
                 return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
             }
 
-            const { customer, billingId, amount } = event.data;
-            const email = customer?.email;
+            // Extract fields (AbacatePay 'billing' object has 'id', 'amount', 'customer')
+            const billingId = payloadData.billingId || payloadData.id;
+            const amount = payloadData.amount;
+            const customer = payloadData.customer;
+            const email = customer?.email || customer?.metadata?.email; // Fallback to metadata if needed
 
             if (!email) {
-                console.error('[Webhook] No email in payload:', JSON.stringify(event.data));
+                console.error('[Webhook] No email in payload:', JSON.stringify(payloadData));
                 return NextResponse.json({ error: 'No email provided' }, { status: 400 });
             }
 
