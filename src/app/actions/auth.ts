@@ -143,3 +143,24 @@ export async function loginUser(email: string, password?: string) {
         return { success: false, error: "Erro interno no servidor." };
     }
 }
+
+export async function sendRecoveryEmail(email: string) {
+    if (!email) return { success: false, error: "Email obrigatório." };
+
+    try {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://certificaai.vercel.app'}/reset-password`,
+        });
+
+        if (error) {
+            console.error("Recovery Email Error:", error.message);
+            // Don't reveal if user exists or not for security, but mostly we just return error if something system-level failed
+            return { success: false, error: "Erro ao enviar email. Tente novamente." };
+        }
+
+        return { success: true };
+    } catch (err) {
+        console.error("Recovery unexpected error:", err);
+        return { success: false, error: "Erro interno." };
+    }
+}

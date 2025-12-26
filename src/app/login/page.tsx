@@ -107,7 +107,7 @@ export default function LoginPage() {
                 </form>
 
                 <div className={styles.footer}>
-                    <p>Ainda não tem conta? <Link href="/offer" className={styles.link}>Escolha um plano</Link></p>
+                    <p>Esqueceu sua senha? <Link href="/forgot-password" className={styles.link}>Redefinir</Link></p>
                 </div>
             </div>
         </main>
