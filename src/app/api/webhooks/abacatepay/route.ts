@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 // Map bill IDs (from URL) to credit amounts
 const PLAN_CREDITS: Record<string, number> = {
     'bill_QApJc1sDxRPEhP5GQ4cytgwc': 1, // Basic
     'bill_stnGXHzHF6pDSu1zMCkQLhcU': 3, // Professional
-    'bill_jrXZs4dsxaKgn0UPxrWeJ2zG': 5  // Premium
+    'bill_jrXZs4dsxaKgn0UPxrWeJ2zG': 5, // Premium
+    'bill_06yCJrGRCBrQCa3NBwn6UhDu': 1  // Teste (R$ 1,00)
 };
 
 export async function POST(req: Request) {
@@ -61,6 +63,32 @@ export async function POST(req: Request) {
 
                     if (!user) {
                         console.log('[Webhook] Creating new user for', email);
+
+                        // --- Supabase Invite Logic START ---
+                        try {
+                            const { data: inviteData, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+                                data: { name: customer.name || 'Aluno' },
+                                redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://certificaai.vercel.app'}/reset-password` // Route to handle password setting
+                            });
+
+                            if (inviteError) {
+                                console.error('[Webhook] Supabase Invite Error:', inviteError.message);
+                                // If user already exists in Supabase but not in Prisma (edge case), try sending a password reset
+                                if (inviteError.message.includes('already registered') || inviteError.status === 422) {
+                                    console.log('[Webhook] User exists in Supabase, sending password reset instead...');
+                                    const { error: resetError } = await supabaseAdmin.auth.resetPasswordForEmail(email, {
+                                        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://certificaai.vercel.app'}/reset-password`
+                                    });
+                                    if (resetError) console.error('[Webhook] Supabase Reset Error:', resetError.message);
+                                }
+                            } else {
+                                console.log('[Webhook] Supabase Invite Sent:', inviteData);
+                            }
+                        } catch (supaError) {
+                            console.error('[Webhook] Supabase Admin Exception:', supaError);
+                        }
+                        // --- Supabase Invite Logic END ---
+
                         user = await prisma.user.create({
                             data: {
                                 email,

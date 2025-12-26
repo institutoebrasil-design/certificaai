@@ -194,6 +194,20 @@ export default function OfferPage() {
                         </ul>
                         <Link href="https://www.abacatepay.com/pay/bill_jrXZs4dsxaKgn0UPxrWeJ2zG" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>Quero Tudo</Link>
                     </div>
+
+                    {/* Test Plan (R$ 1,00) */}
+                    <div className={styles.pricingCard} style={{ opacity: 0.8, borderColor: '#efefef' }}>
+                        <h3 className={styles.planName} style={{ fontSize: '1.2rem' }}>Teste de Produção</h3>
+                        <div className={styles.price} style={{ fontSize: '2rem' }}>
+                            <span className={styles.currency}>R$</span>1,00
+                        </div>
+                        <ul className={styles.featuresList}>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> 1 Certificação (Teste)</li>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Acesso Imediato</li>
+                            <li className={styles.featureItem}><Check size={20} color="#4ade80" /> Validação de Fluxo</li>
+                        </ul>
+                        <Link href="https://www.abacatepay.com/pay/bill_06yCJrGRCBrQCa3NBwn6UhDu" className={styles.ctaButton} style={{ display: 'block', textAlign: 'center', textDecoration: 'none', background: '#333' }}>Testar Agora</Link>
+                    </div>
                 </div>
             </section>
         </main>
