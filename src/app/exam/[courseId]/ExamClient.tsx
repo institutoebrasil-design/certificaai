@@ -214,7 +214,7 @@ export default function ExamClient({ title, courseId }: { title: string, courseI
                         <>
                             {questions.map((q, index) => (
                                 <div key={q.id} className={styles.questionCard}>
-                                    <h3 className={styles.questionText}>{q.text}</h3>
+                                    <h3 className={styles.questionText}>{index + 1}. {q.text}</h3>
                                     <div className={styles.optionsGrid}>
                                         {q.options.map((opt: string, optIndex: number) => (
                                             <button
