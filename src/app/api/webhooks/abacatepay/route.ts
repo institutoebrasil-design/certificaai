@@ -6,7 +6,6 @@ const PLAN_CREDITS: Record<string, number> = {
     'bill_QApJc1sDxRPEhP5GQ4cytgwc': 1, // Basic
     'bill_stnGXHzHF6pDSu1zMCkQLhcU': 3, // Professional
     'bill_jrXZs4dsxaKgn0UPxrWeJ2zG': 5, // Premium
-    'bill_06yCJrGRCBrQCa3NBwn6UhDu': 1  // Teste (R$ 1,00)
 };
 
 export async function POST(req: Request) {
