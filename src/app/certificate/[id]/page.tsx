@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import CertificateTemplate from '@/components/CertificateTemplate';
+import CertificateModern from '@/components/CertificateModern';
 import { notFound } from 'next/navigation';
 
 const prisma = new PrismaClient();
@@ -24,7 +24,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ id
     }
 
     return (
-        <CertificateTemplate
+        <CertificateModern
             userName={certificate.user.name || 'Aluno IEB'}
             cpf={certificate.user.cpf || '000.000.000-00'}
             courseName={certificate.course.title}
