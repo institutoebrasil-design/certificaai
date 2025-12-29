@@ -175,7 +175,7 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
                 .certificate {
                     width: 1123px; /* A4 Landscape */
                     height: 794px;
-                    background: #fffdf5; /* Cream paper */
+                    background: #ffffff; /* White paper */
                     padding: 0; /* Managed by relative elems */
                     box-sizing: border-box;
                     position: relative;
@@ -190,7 +190,7 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
                     position: absolute;
                     top: 15px; left: 15px; right: 15px; bottom: 15px;
                     border: 2px solid #b49b57; /* Gold border inner */
-                    outline: 10px solid #fffdf5;
+                    outline: 10px solid #ffffff;
                     box-shadow: inset 0 0 0 4px #1a1a1a, inset 0 0 0 8px #b49b57;
                     z-index: 10;
                     pointer-events: none;
@@ -202,7 +202,7 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
                     top: 0; left: 0; right: 0; bottom: 0;
                     background-image: 
                         radial-gradient(#b49b57 0.5px, transparent 0.5px), 
-                        radial-gradient(#b49b57 0.5px, #fffdf5 0.5px);
+                        radial-gradient(#b49b57 0.5px, #ffffff 0.5px);
                     background-size: 20px 20px;
                     background-position: 0 0, 10px 10px;
                     opacity: 0.1;
