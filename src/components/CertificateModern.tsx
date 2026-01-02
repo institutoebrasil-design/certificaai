@@ -94,14 +94,14 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
                         <span className="cargo">Augusto Lima<br />Diretor Geral</span>
                     </div>
 
-                    <div className="seal-container">
+                    {/* <div className="seal-container">
                         <div className="seal">
                             <div className="seal-inner">
                                 <span>MEC</span>
                                 <small>Auth</small>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="assinatura-block">
                         <div className="linha empty"></div>
