@@ -189,9 +189,9 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
                 .border-pattern {
                     position: absolute;
                     top: 15px; left: 15px; right: 15px; bottom: 15px;
-                    border: 2px solid #b49b57; /* Gold border inner */
+                    border: 2px solid #dc2626; /* Gold border inner */
                     outline: 10px solid #ffffff;
-                    box-shadow: inset 0 0 0 4px #1a1a1a, inset 0 0 0 8px #b49b57;
+                    box-shadow: inset 0 0 0 4px #1a1a1a, inset 0 0 0 8px #dc2626;
                     z-index: 10;
                     pointer-events: none;
                 }
@@ -201,8 +201,8 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
                     position: absolute;
                     top: 0; left: 0; right: 0; bottom: 0;
                     background-image: 
-                        radial-gradient(#b49b57 0.5px, transparent 0.5px), 
-                        radial-gradient(#b49b57 0.5px, #ffffff 0.5px);
+                        radial-gradient(#dc2626 0.5px, transparent 0.5px), 
+                        radial-gradient(#dc2626 0.5px, #ffffff 0.5px);
                     background-size: 20px 20px;
                     background-position: 0 0, 10px 10px;
                     opacity: 0.1;
@@ -253,7 +253,7 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
                 .gold-line {
                     width: 100px;
                     height: 3px;
-                    background: #b49b57;
+                    background: #dc2626;
                     margin: 0 auto 30px auto;
                 }
 
@@ -270,7 +270,7 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
 
                 .nome {
                     font-size: 58px;
-                    color: #b49b57; /* Gold */
+                    color: #dc2626; /* Gold */
                     margin: 20px 0;
                     line-height: 1.2;
                     text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
@@ -333,7 +333,7 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
                 .seal {
                     width: 100px;
                     height: 100px;
-                    background: #b49b57;
+                    background: #dc2626;
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
@@ -401,7 +401,7 @@ export default function CertificateModern({ userName, courseName, cpf, date, cod
                     margin: 20px 0;
                 }
                 .conteudo h3 {
-                    border-bottom: 3px solid #b49b57;
+                    border-bottom: 3px solid #dc2626;
                     padding-bottom: 10px;
                     margin-bottom: 20px;
                     color: #1a1a1a;
